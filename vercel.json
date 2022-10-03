@@ -13,10 +13,6 @@
             "dest": "/public/css/app.css"
         },
         {
-            "src": "/api",
-            "dest": "/api/index.php"
-        },
-        {
             "src": "/(.*)\\.(.*)$",
             "dest": "public/$1.$2"
         },
