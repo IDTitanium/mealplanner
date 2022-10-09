@@ -74,14 +74,18 @@ class PlanController extends Controller
             'plan' => 'required|exists:plans,id'
         ]);
 
-        PlanSchedule::create([
+        PlanSchedule::updateOrCreate(
+        [
             'weekday_id' => $request->weekday,
             'meal_type_id' => $request->meal_type,
             'plan_id' => $request->plan,
+        ],
+        [
             'meal_name' => $request->meal_name,
             'created_by' => auth()->id(),
             'updated_by' => auth()->id()
-        ]);
+        ]
+    );
 
         return redirect(RouteServiceProvider::HOME);
     }
