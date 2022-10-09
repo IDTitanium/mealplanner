@@ -43,7 +43,7 @@ import axios from 'axios';
                             </div>
 
                             </div>
-                            <p class="ml-5">Active Plan: {{activePlan.name}}</p>
+                            <p class="ml-5">Active Plan: {{activePlan? activePlan.name: null}}</p>
                             <div class="flex w-100">
                                 <div class="p-5 w-full text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
                                     Meals planned for today
