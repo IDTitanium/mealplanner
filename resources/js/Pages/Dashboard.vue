@@ -146,7 +146,7 @@ import axios from 'axios';
                                             {{plan.meal_name}}
                                         </td>
                                         <td class="py-4 px-6">
-                                            {{plan.created_by}}
+                                            {{plan.creator.name}}
                                         </td>
                                     </tr>
                                 </tbody>
