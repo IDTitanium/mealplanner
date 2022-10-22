@@ -22,7 +22,7 @@ if (App::environment('production')) {
     URL::forceScheme('https');
 }
 
-Route::get('/', [AuthController::class, 'getHome']);
+Route::get('/', [AuthController::class, 'getHome'])->name('welcome');
 
 Route::middleware(['auth', 'verified'])->group(function($route) {
     $route->get('/dashboard', [AuthController::class, 'getDashboard'])->name('dashboard');
