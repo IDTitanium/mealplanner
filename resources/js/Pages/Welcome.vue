@@ -119,9 +119,9 @@ const submit = () => {
             data-mdb-ripple="true"
             data-mdb-ripple-color="light"
           >
-            Register a new family
+            Register
         </Link>
-          <Link
+          <!-- <Link
             class="px-7 py-3 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full flex justify-center items-center"
             style="background-color: #55acee"
             href="#!"
@@ -131,7 +131,7 @@ const submit = () => {
 
           >
             Join a family
-        </Link>
+        </Link> -->
         </form>
       </div>
     </div>
