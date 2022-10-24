@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Family;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -38,6 +39,7 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'family_name' => ['required', 'unique:families,name', 'max:255']
         ]);
 
         $user = User::create([
@@ -45,6 +47,14 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        $family = Family::create([
+            'name' => $request->family_name,
+            'creator_id' => $user->id
+        ]);
+
+        $user->family_id = $family->id;
+        $user->save();
 
         event(new Registered($user));
 

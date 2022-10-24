@@ -48,11 +48,14 @@ class PlanController extends Controller
             Plan::setAllDefaultFalse();
         }
 
+        $user = auth()->user();
+
         Plan::create([
             'name' => $planName,
             'is_default' => $isDefault,
             'created_by' => auth()->id(),
-            'updated_by' => auth()->id()
+            'updated_by' => auth()->id(),
+            'family_id' => $user->family_id
         ]);
 
         return redirect(RouteServiceProvider::HOME);
@@ -62,7 +65,7 @@ class PlanController extends Controller
         return Inertia::render('CreatePlanSchedule', [
             'meal_types' => MealType::all(['id', 'name']),
             'weekdays' => Weekday::all(['id', 'name']),
-            'plans' => Plan::where('created_by', auth()->id())->get()
+            'plans' => Plan::where('family_id', auth()->user()->family_id)->get()
         ]);
     }
 
@@ -75,17 +78,17 @@ class PlanController extends Controller
         ]);
 
         PlanSchedule::updateOrCreate(
-        [
-            'weekday_id' => $request->weekday,
-            'meal_type_id' => $request->meal_type,
-            'plan_id' => $request->plan,
-        ],
-        [
-            'meal_name' => $request->meal_name,
-            'created_by' => auth()->id(),
-            'updated_by' => auth()->id()
-        ]
-    );
+            [
+                'weekday_id' => $request->weekday,
+                'meal_type_id' => $request->meal_type,
+                'plan_id' => $request->plan,
+            ],
+            [
+                'meal_name' => $request->meal_name,
+                'created_by' => auth()->id(),
+                'updated_by' => auth()->id()
+            ]
+        );
 
         return redirect(RouteServiceProvider::HOME);
     }
@@ -99,7 +102,7 @@ class PlanController extends Controller
     }
 
     public function getActivePlan() {
-        $data = Plan::where('created_by', auth()->id())->where('is_default', true)->first();
+        $data = Plan::where('is_default', true)->first();
         return response()->json([
             'message' => __('Data fetched successfully'),
             'data' => $data

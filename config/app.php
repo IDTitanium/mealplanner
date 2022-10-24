@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Meal Planner'),
 
     /*
     |--------------------------------------------------------------------------
@@ -231,5 +231,17 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Custom Application settings
+    |--------------------------------------------------------------------------
+    |
+    | Configs used by the application
+    |
+    */
+    'setting' => [
+        'default_password' => env('DEFAULT_PASSWORD', 'password')
+    ]
 
 ];

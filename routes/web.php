@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\PlanController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -23,11 +24,18 @@ if (App::environment('production')) {
 }
 
 Route::get('/', [AuthController::class, 'getHome'])->name('welcome');
+Route::get('/join-1', [FamilyController::class, 'getJoinFamilyStep1'])->name('join-step-1');
+Route::get('/join-2', [FamilyController::class, 'getJoinFamilyStep2'])->name('join-step-2');
+Route::post('/check-step-1', [FamilyController::class, 'checkStep1'])->name('check-join-step-1');
+Route::post('/check-step-2', [FamilyController::class, 'checkStep2'])->name('check-join-step-2');
 
 Route::middleware(['auth', 'verified'])->group(function($route) {
     $route->get('/dashboard', [AuthController::class, 'getDashboard'])->name('dashboard');
     $route->get('/createplan', [PlanController::class, 'createNewPlan'])->name('create-plan');
     $route->get('/createschedule', [PlanController::class, 'createPlanSchedule'])->name('create-schedule');
+    $route->get('/add-member', [FamilyController::class, 'addFamilyMember'])->name('add-member');
+    $route->post('/store-member', [FamilyController::class, 'storeNewFamilyMember'])->name('store-member');
+    $route->get('/list-members', [FamilyController::class, 'listFamilyMembers'])->name('list-members');
 });
 
 /** API Routes work around */
