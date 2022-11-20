@@ -1,5 +1,7 @@
 {
-    "engines": { "node": ">=16.0.0 <17.0.0" },
+    "engines": {
+        "node": ">=16.0.0 <17.0.0"
+    },
     "private": true,
     "scripts": {
         "dev": "npm ci && npm run development",
@@ -25,5 +27,8 @@
         "tailwindcss": "^3.1.0",
         "vue": "^3.2.31",
         "vue-loader": "^17.0.0"
+    },
+    "dependencies": {
+        "@heroicons/vue": "^2.0.12"
     }
 }

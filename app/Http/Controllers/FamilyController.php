@@ -11,8 +11,13 @@ use App\Models\Weekday;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Illuminate\Validation\Rules;
+use App\Traits\Toast;
 
 class FamilyController extends Controller
 {
@@ -20,6 +25,7 @@ class FamilyController extends Controller
         if (User::where('family_id', auth()->user()->family_id)->count() >= 10) {
             return Inertia::render('Dashboard')->with('errors', 'Max Members Reached');
         }
+
         return Inertia::render('Setting/AddAFamilyMember');
     }
 
@@ -35,7 +41,7 @@ class FamilyController extends Controller
         $data['family_id'] = $admin->family_id;
 
         User::createNewUser($data);
-
+        Toast::show('Success!', 'Member Added Successfully');
         return $this->listFamilyMembers();
     }
 
@@ -61,12 +67,20 @@ class FamilyController extends Controller
                 }
             }]
         ]);
-
-        return redirect('/join-2')->with(['details' => $request->only(['family_name', 'email'])]);
+        $data = [
+            "details" => [
+                "family_name" => $request->family_name,
+                "email" => $request->email
+            ]
+        ];
+        $data = Crypt::encrypt($data);
+        return redirect("/join-2?q=".$data);
     }
 
-    public function getJoinFamilyStep2() {
-        return Inertia::render('Setting/JoinFamilyStep2');
+    public function getJoinFamilyStep2(Request $request) {
+        $data = Crypt::decrypt($request->q);
+
+        return Inertia::render('Setting/JoinFamilyStep2', $data);
     }
 
     public function checkStep2(Request $request) {
@@ -81,13 +95,13 @@ class FamilyController extends Controller
                     $fail('This user has not been invited to this family');
                 }
             }],
-            'password' => 'required'
+            'password' => ['required', 'confirmed']
         ]);
 
         User::where('email', $request->email)->update([
-            'password' => $request->password
+            'password' => Hash::make($request->password)
         ]);
 
-        return redirect('/welcome');
+        return redirect('/');
     }
 }

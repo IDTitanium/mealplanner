@@ -10,7 +10,9 @@ import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 
 const form = useForm({
     password: "",
-    password_confirmation: ''
+    password_confirmation: '',
+    family_name: '',
+    email: ''
 });
 
 const props = defineProps({
@@ -20,6 +22,8 @@ const props = defineProps({
 const submit = () => {
     form.family_name = props.details['family_name']
     form.email = props.details['email']
+
+    console.log(form)
     form.post(route('check-join-step-2'), {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
