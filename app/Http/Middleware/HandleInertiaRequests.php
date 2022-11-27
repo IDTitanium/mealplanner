@@ -34,6 +34,18 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request)
     {
+        $toast = null;
+        if ($request->session()->has('errors')) {
+            $toast = [
+                'title'      => 'Check your details, and try again.',
+                'message'    => null,
+                'type'       => 'error',
+                'alwaysShow' => false
+            ];
+        } else {
+            $toast = $request->session()->get('toast');
+        }
+
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
@@ -41,6 +53,7 @@ class HandleInertiaRequests extends Middleware
             'ziggy' => function () {
                 return (new Ziggy)->toArray();
             },
+            'toast' => $toast
         ]);
     }
 }

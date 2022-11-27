@@ -12,6 +12,7 @@ const form = useForm({
     password: '',
     password_confirmation: '',
     terms: false,
+    family_name: ''
 });
 
 const submit = () => {
@@ -29,6 +30,11 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
+                <BreezeLabel for="family_name" value="Family Name" />
+                <BreezeInput id="family_name" type="text" class="mt-1 block w-full" v-model="form.family_name" required autofocus autocomplete="family_name" />
+            </div>
+
+            <div class="mt-4">
                 <BreezeLabel for="name" value="Name" />
                 <BreezeInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus autocomplete="name" />
             </div>

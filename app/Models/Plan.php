@@ -2,21 +2,30 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Plan extends Model
 {
     use HasFactory;
 
-    //TODO: define relations;
+    protected static function boot() {
+        parent::boot();
+
+        $user = auth()->user();
+        if($user) {
+            static::addGlobalScope('family_id', function (Builder $builder) use ($user) {
+                $builder->where('family_id', $user->family_id);
+            });
+        }
+    }
 
     public static function getPlanSchedulesByWeekDay()
     {
-        $plan = static::where('is_default', true)->where('created_by', auth()->id())->first();
+        $plan = static::where('is_default', true)->first();
         if (!$plan) return [];
         $planSchedules =
-        PlanSchedule::where('plan_id', $plan->id)->where('created_by', auth()->id())
-        ->orderBy('weekday_id', 'asc')->get();
+        PlanSchedule::where('plan_id', $plan->id)->orderBy('weekday_id', 'asc')->get();
         return $planSchedules;
     }
 
@@ -44,12 +53,12 @@ class Plan extends Model
         ->join('meal_types', 'meal_types.id', 'plan_schedules.meal_type_id')
         ->where('plans.is_default', true)
         ->where('weekdays.name', $day)
-        ->where('plan_schedules.created_by', auth()->id());
+        ->where('plans.family_id', auth()->user()->family_id);
     }
 
     public static function setAllDefaultFalse()
     {
-        static::where('is_default', true)->where('created_by', auth()->id())->update(['is_default' => false]);
+        static::where('is_default', true)->update(['is_default' => false]);
     }
 
     public static function mealForTomorrow()
