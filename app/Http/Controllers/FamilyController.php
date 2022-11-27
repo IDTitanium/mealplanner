@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendUserInvitedEmail;
 use App\Models\Family;
 use App\Models\MealType;
 use App\Models\Plan;
@@ -42,6 +43,20 @@ class FamilyController extends Controller
 
         User::createNewUser($data);
         Toast::show('Success!', 'Member Added Successfully');
+
+        $familyName = $admin->family()->first()->name;
+        $baseUrl = config('app.url');
+        $linkData = [
+            "details" => [
+                "family_name" => $familyName,
+                "email" => $request->email
+            ]
+        ];
+        $linkData = Crypt::encrypt($data);
+
+        $link = $baseUrl . "/join-2?q=". $linkData;
+
+        (new SendUserInvitedEmail($familyName, $link))->to($request->email);
         return $this->listFamilyMembers();
     }
 
