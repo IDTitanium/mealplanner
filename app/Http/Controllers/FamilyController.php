@@ -19,11 +19,13 @@ use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Illuminate\Validation\Rules;
 use App\Traits\Toast;
+use Illuminate\Support\Facades\Mail;
 
 class FamilyController extends Controller
 {
     public function addFamilyMember() {
         if (User::where('family_id', auth()->user()->family_id)->count() >= 10) {
+            Toast::show("Max Members Reached", "You have reached maximum number of members", 'error');
             return Inertia::render('Dashboard')->with('errors', 'Max Members Reached');
         }
 
@@ -56,7 +58,7 @@ class FamilyController extends Controller
 
         $link = $baseUrl . "/join-2?q=". $linkData;
 
-        (new SendUserInvitedEmail($familyName, $link))->to($request->email);
+        Mail::to($request->email)->send(new SendUserInvitedEmail($familyName, $link));
         return $this->listFamilyMembers();
     }
 

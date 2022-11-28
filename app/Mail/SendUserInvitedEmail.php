@@ -32,6 +32,11 @@ class SendUserInvitedEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.join-family');
+        $this->subject('You been Invited to Join a family')
+                    ->view('emails.join-family')
+                    ->with([
+                        'familyName' => $this->familyName,
+                        'link' => $this->link
+                    ]);
     }
 }
