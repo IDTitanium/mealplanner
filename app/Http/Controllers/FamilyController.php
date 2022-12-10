@@ -26,7 +26,7 @@ class FamilyController extends Controller
     public function addFamilyMember() {
         if (User::where('family_id', auth()->user()->family_id)->count() >= 10) {
             Toast::show("Max Members Reached", "You have reached maximum number of members", 'error');
-            return Inertia::render('Dashboard')->with('errors', 'Max Members Reached');
+            return redirect('/');
         }
 
         return Inertia::render('Setting/AddAFamilyMember');
@@ -54,12 +54,12 @@ class FamilyController extends Controller
                 "email" => $request->email
             ]
         ];
-        $linkData = Crypt::encrypt($data);
+        $linkData = Crypt::encrypt($linkData);
 
         $link = $baseUrl . "/join-2?q=". $linkData;
 
         Mail::to($request->email)->send(new SendUserInvitedEmail($familyName, $link));
-        return $this->listFamilyMembers();
+        return redirect('/list-members');
     }
 
     public function listFamilyMembers() {
@@ -128,6 +128,6 @@ class FamilyController extends Controller
     public function removeFamilyMember($id) {
         optional(User::find($id))->delete();
 
-        return redirect()->back();
+        return redirect('/list-members');
     }
 }

@@ -20,6 +20,7 @@ const props = defineProps({
 })
 
 const submit = () => {
+    console.log(props)
     form.family_name = props.details['family_name']
     form.email = props.details['email']
 
