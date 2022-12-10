@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendUserInvitedEmail;
 use App\Models\Family;
 use App\Models\MealType;
 use App\Models\Plan;
@@ -18,11 +19,13 @@ use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Illuminate\Validation\Rules;
 use App\Traits\Toast;
+use Illuminate\Support\Facades\Mail;
 
 class FamilyController extends Controller
 {
     public function addFamilyMember() {
         if (User::where('family_id', auth()->user()->family_id)->count() >= 10) {
+            Toast::show("Max Members Reached", "You have reached maximum number of members", 'error');
             return Inertia::render('Dashboard')->with('errors', 'Max Members Reached');
         }
 
@@ -42,12 +45,29 @@ class FamilyController extends Controller
 
         User::createNewUser($data);
         Toast::show('Success!', 'Member Added Successfully');
+
+        $familyName = $admin->family()->first()->name;
+        $baseUrl = config('app.url');
+        $linkData = [
+            "details" => [
+                "family_name" => $familyName,
+                "email" => $request->email
+            ]
+        ];
+        $linkData = Crypt::encrypt($data);
+
+        $link = $baseUrl . "/join-2?q=". $linkData;
+
+        Mail::to($request->email)->send(new SendUserInvitedEmail($familyName, $link));
         return $this->listFamilyMembers();
     }
 
     public function listFamilyMembers() {
-        $data = User::where('family_id', auth()->user()->family_id)->get();
-        return Inertia::render('Setting/FamilyMembers', ['users' => $data]);
+        $familyId = auth()->user()->family_id;
+        $data = User::where('family_id', $familyId)->get();
+        $creatorId = Family::where('id', $familyId)->first()->creator_id;
+        $loggedInUserId = auth()->id();
+        return Inertia::render('Setting/FamilyMembers', ['users' => $data, 'forbidden_ids' => [$creatorId, $loggedInUserId]]);
     }
 
     public function getJoinFamilyStep1() {
@@ -103,5 +123,11 @@ class FamilyController extends Controller
         ]);
 
         return redirect('/');
+    }
+
+    public function removeFamilyMember($id) {
+        optional(User::find($id))->delete();
+
+        return redirect()->back();
     }
 }

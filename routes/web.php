@@ -36,6 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function($route) {
     $route->get('/add-member', [FamilyController::class, 'addFamilyMember'])->name('add-member');
     $route->post('/store-member', [FamilyController::class, 'storeNewFamilyMember'])->name('store-member');
     $route->get('/list-members', [FamilyController::class, 'listFamilyMembers'])->name('list-members');
+    $route->delete('/remove-member/{id}', [FamilyController::class, 'removeFamilyMember'])->name('remove-family-member');
 });
 
 /** API Routes work around */
