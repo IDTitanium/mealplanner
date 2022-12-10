@@ -111,7 +111,7 @@
                   </table>
                   <table cellpadding="0" cellspacing="0" width="585" align="center" style="margin:0 auto;">
                     <tr>
-                      <td class="paragraph" style="text-align:left;font-family:'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-weight:300;font-size:30px;color:#000000;line-height:36px;">You been invited to join{{ $familyName }} family on meal planner<br><br>
+                      <td class="paragraph" style="text-align:left;font-family:'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-weight:300;font-size:30px;color:#000000;line-height:36px;">You been invited to join {{ $familyName }} on meal planner<br><br>
                         <section style="font-size:17px">
                             To join {{ $familyName }} click on the link below <br>
                             <a href="{{$link}}">{{$link}}</a>
