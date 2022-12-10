@@ -1,11 +1,20 @@
 <script setup>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
-import { Head, Link } from '@inertiajs/inertia-vue3';
+import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import axios from 'axios';
 
 defineProps({
     users: Array,
+    forbidden_ids: Array
 });
+
+const form = useForm({
+
+})
+
+const removeFamilyMember = (id) => {
+    form.delete(route('remove-family-member', id))
+}
 
 </script>
 
@@ -54,6 +63,9 @@ defineProps({
                                         <th scope="col" class="py-3 px-6">
                                             Email
                                         </th>
+                                        <th scope="col" class="py-3 px-6">
+                                            Action
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -65,7 +77,11 @@ defineProps({
                                         <td class="py-4 px-6">
                                             {{user.email}}
                                         </td>
-
+                                        <td class="py-4 px-6">
+                                            <a class="cursor-pointer red-link" @click.prevent="removeFamilyMember(user.id)" v-if="!forbidden_ids.includes(user.id)">
+                                            Remove
+                                            </a>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -77,19 +93,8 @@ defineProps({
     </BreezeAuthenticatedLayout>
     </div>
 </template>
-
-<script>
-    export default {
-        data() {
-            return {
-
-            }
-        },
-        created() {
-
-        },
-        methods: {
-
-        }
-    }
-</script>
+<style>
+.red-link {
+  color: #f00;
+}
+</style>

@@ -2,7 +2,7 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>You been invited to Join the {{ $familyName }} family</title>
+  <title>You been invited to Join the {{ $familyName }}</title>
   <style type="text/css">
       html,body {
         margin:0;
@@ -113,8 +113,8 @@
                     <tr>
                       <td class="paragraph" style="text-align:left;font-family:'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-weight:300;font-size:30px;color:#000000;line-height:36px;">You been invited to join{{ $familyName }} family on meal planner<br><br>
                         <section style="font-size:17px">
-                            To join {{ $familyName }} family click on the link below <br>
-                            <a href="{{$link}}"></a>
+                            To join {{ $familyName }} click on the link below <br>
+                            <a href="{{$link}}">{{$link}}</a>
                         <br>
                         <br>
                         If you're experiencing difficulties or you think this was a mistake, kindly send an email to <a href="mailto:planmymealapp@gmail.com">planmymealapp@gmail.com</a></a></section>

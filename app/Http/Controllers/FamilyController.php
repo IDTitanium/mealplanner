@@ -63,8 +63,11 @@ class FamilyController extends Controller
     }
 
     public function listFamilyMembers() {
-        $data = User::where('family_id', auth()->user()->family_id)->get();
-        return Inertia::render('Setting/FamilyMembers', ['users' => $data]);
+        $familyId = auth()->user()->family_id;
+        $data = User::where('family_id', $familyId)->get();
+        $creatorId = Family::where('id', $familyId)->first()->creator_id;
+        $loggedInUserId = auth()->id();
+        return Inertia::render('Setting/FamilyMembers', ['users' => $data, 'forbidden_ids' => [$creatorId, $loggedInUserId]]);
     }
 
     public function getJoinFamilyStep1() {
@@ -120,5 +123,11 @@ class FamilyController extends Controller
         ]);
 
         return redirect('/');
+    }
+
+    public function removeFamilyMember($id) {
+        optional(User::find($id))->delete();
+
+        return redirect()->back();
     }
 }
