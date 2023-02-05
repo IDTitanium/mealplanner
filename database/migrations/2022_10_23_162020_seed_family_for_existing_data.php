@@ -18,22 +18,24 @@ class SeedFamilyForExistingData extends Migration
     {
         $creator = User::where('email', 'idriseun222@gmail.com')->first();
 
-        $family = Family::firstOrCreate(
-            [
-                'name' => "The Idris Family"
-            ],
-            [
-                'creator_id' => $creator->id
-            ]
-        );
+        if ($creator) {
+            $family = Family::firstOrCreate(
+                [
+                    'name' => "The Idris Family"
+                ],
+                [
+                    'creator_id' => $creator->id
+                ]
+            );
 
-        User::query()->update([
-            'family_id' => $family->id
-        ]);
+            User::query()->update([
+                'family_id' => $family->id
+            ]);
 
-        Plan::query()->update([
-            'family_id' => $family->id
-        ]);
+            Plan::query()->update([
+                'family_id' => $family->id
+            ]);
+        }
     }
 
     /**
