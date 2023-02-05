@@ -27,9 +27,9 @@ jobs:
     - name: Run the database migration
       env:
         DB_CONNECTION: mysql
-        DB_DATABASE: $DB_DATABASE
-        DB_HOST: $DB_HOST
-        DB_USERNAME: $DB_USERNAME
-        DB_PASSWORD: $DB_PASSWORD
-        DB_PORT: $DB_PORT
+        DB_DATABASE: ${{ vars.DB_DATABASE }}
+        DB_HOST: ${{ vars.DB_HOST }}
+        DB_USERNAME: ${{ vars.DB_USERNAME }}
+        DB_PASSWORD: ${{ vars.DB_PASSWORD }}
+        DB_PORT: ${{ vars.DB_PORT }}
       run: php artisan migrate
