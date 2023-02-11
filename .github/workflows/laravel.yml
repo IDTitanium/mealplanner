@@ -25,11 +25,11 @@ jobs:
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
     - name: DB host
-      run: echo ${{vars.DB_HOST}}
+      run: echo "${{vars.DB_HOST}}"
     - name: DB Database
-      run: echo ${{vars.DB_DATABASE}}
+      run: echo "${{vars.DB_DATABASE}}"
     - name: DB Username
-      run: echo ${{secrets.DB_USERNAME}}
+      run: echo "${{secrets.DB_USERNAME}}"
     - name: Configure environment
       run: |
         echo "DB_HOST=${{ vars.DB_HOST }}" >> .env
