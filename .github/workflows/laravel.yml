@@ -8,9 +8,9 @@ on:
 
 env:
   DB_DATABASE: mealplanner
-  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  DB_PASSWORD: mealplannerdb
   DB_PORT: 3306
-  DB_USERNAME: ${{ secrets.DB_USERNAME }}
+  DB_USERNAME: admin
   DB_HOST: mealplanner.c9ttvnc4ekpj.us-east-1.rds.amazonaws.com
 
 jobs:
