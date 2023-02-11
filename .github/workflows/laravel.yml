@@ -27,7 +27,7 @@ jobs:
     - name: Configure environment
       run: |
         echo "DB_HOST=${{ vars.DB_HOST }}" >> .env
-        echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+        echo "DB_DATABASE=${{ vars.DB_DATABASE }}" >> .env
         echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
         echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
     - name: Run migrations
