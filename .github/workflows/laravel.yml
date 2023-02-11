@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [ "master" ]
 
+env:
+  DB_DATABASE: ${{ vars.DB_DATABASE }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  DB_PORT: 3306
+  DB_USERNAME: ${{ secrets.DB_USERNAME }}
+  DB_HOST: ${{ vars.DB_HOST }}
+
 jobs:
   laravel-migration:
 
@@ -25,17 +32,17 @@ jobs:
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
     - name: DB host
-      run: echo "${{vars.DB_HOST}}"
+      run: echo "${{env.DB_HOST}}"
     - name: DB Database
-      run: echo "${{vars.DB_DATABASE}}"
+      run: echo "${{env.DB_DATABASE}}"
     - name: DB Username
-      run: echo "${{secrets.DB_USERNAME}}"
+      run: echo "${{env.DB_USERNAME}}"
     - name: Configure environment
       run: |
-        echo "DB_HOST=${{ vars.DB_HOST }}" >> .env
-        echo "DB_DATABASE=${{ vars.DB_DATABASE }}" >> .env
-        echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
-        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+        echo "DB_HOST=${{ env.DB_HOST }}" >> .env
+        echo "DB_DATABASE=${{ env.DB_DATABASE }}" >> .env
+        echo "DB_USERNAME=${{ env.DB_USERNAME }}" >> .env
+        echo "DB_PASSWORD=${{ env.DB_PASSWORD }}" >> .env
     - name: Run migrations
       run: |
         php artisan migrate --force
