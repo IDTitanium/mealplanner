@@ -21,7 +21,9 @@ const form = useForm({
 const submit = () => {
     axios.get('/sanctum/csrf-cookie').then(response => {
         form.post(route('login'), {
-            onFinish: () => form.reset('password'),
+            onFinish: () => {
+                return form.reset('password')
+            },
         });
     });
 };

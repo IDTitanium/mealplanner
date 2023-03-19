@@ -37,6 +37,9 @@ class AuthController extends Controller
     }
 
     public function getHome() {
+       if (auth()->user()) {
+            return redirect('/dashboard');
+       }
        return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
