@@ -32,3 +32,5 @@ if (App::environment('production')) {
 //     $route->post('/schedule', [PlanController::class, 'storeSchedule'])->name('api.schedule.store');
 //     $route->get('/plans/active', [PlanController::class, 'getActivePlan'])->name('api.plans.active');
 // });
+
+Route::post('/test', [TestController::class, 'test']);
