@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\PlanController;
+use App\Http\Controllers\TestController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -51,5 +52,7 @@ Route::middleware(['auth:sanctum'])->group(function($route){
     $route->post('/schedule', [PlanController::class, 'storeSchedule'])->name('api.schedule.store');
     $route->get('/plans/active', [PlanController::class, 'getActivePlan'])->name('api.plans.active');
 });
+
+Route::post('/test', [TestController::class, 'test']);
 
 require __DIR__.'/auth.php';
