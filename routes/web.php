@@ -51,8 +51,7 @@ Route::middleware(['auth:sanctum'])->group(function($route){
     $route->post('/plans', [PlanController::class, 'storeNewPlan'])->name('api.plans.store');
     $route->post('/schedule', [PlanController::class, 'storeSchedule'])->name('api.schedule.store');
     $route->get('/plans/active', [PlanController::class, 'getActivePlan'])->name('api.plans.active');
+    Route::post('/test', [TestController::class, 'test']);
 });
-
-Route::post('/test', [TestController::class, 'test']);
 
 require __DIR__.'/auth.php';
