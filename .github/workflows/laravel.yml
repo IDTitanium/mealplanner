@@ -7,11 +7,11 @@ on:
     branches: [ "master" ]
 
 env:
-  DB_DATABASE: mealplanner
+  DB_DATABASE: mealplanner-db
   DB_PASSWORD: mealplannerdb
   DB_PORT: 3306
   DB_USERNAME: admin
-  DB_HOST: mealplanner.c9ttvnc4ekpj.us-east-1.rds.amazonaws.com
+  DB_HOST: mealplanner-db.coixkocj2bcb.us-east-1.rds.amazonaws.com
 
 jobs:
   laravel-migration:
