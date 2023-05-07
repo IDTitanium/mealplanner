@@ -14,7 +14,9 @@ use Inertia\Inertia;
 class PlanController extends Controller
 {
     public function getDefaultPlanSchedules() {
-        $data = Plan::getPlanSchedulesByWeekDay();
+        // $data = Plan::getPlanSchedulesByWeekDay();
+        $data = Plan::getPlanSchedulesByMealType();
+
         return response()->json(
             [
                 'message' => __('Data fetched successfully'),
@@ -107,5 +109,16 @@ class PlanController extends Controller
             'message' => __('Data fetched successfully'),
             'data' => $data
         ], Response::HTTP_OK);
+    }
+
+    public function getMealForDay(Request $request) {
+        $data = $request->only(['meal_type', 'day']);
+
+        $result = Plan::getMealForDayByType($data['meal_type'], $data['day']);
+
+        return response()->json([
+            'message' => __('Data fetched successfully'),
+            'data' => $result
+        ]);
     }
 }

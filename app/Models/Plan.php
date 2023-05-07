@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 
 class Plan extends Model
 {
@@ -27,6 +28,36 @@ class Plan extends Model
         $planSchedules =
         PlanSchedule::where('plan_id', $plan->id)->orderBy('weekday_id', 'asc')->get();
         return $planSchedules;
+    }
+
+    public static function getPlanSchedulesByMealType()
+    {
+        $results = DB::table('plan_schedules')
+                ->join('plans', function ($join) {
+                    $join->on('plan_schedules.plan_id', '=', 'plans.id')
+                    ->where('plans.is_default', '=', true);
+                })
+                ->join('meal_types', 'plan_schedules.meal_type_id', '=', 'meal_types.id')
+                ->select('meal_types.name as meal_type_name', 'plan_schedules.*')
+                ->groupBy('plan_schedules.id')
+                ->get();
+
+        return $results;
+    }
+
+    public static function getMealForDayByType(string $type, string $day)
+    {
+        return DB::table('plan_schedules')
+        ->join('plans', function ($join) {
+            $join->on('plan_schedules.plan_id', '=', 'plans.id')
+            ->where('plans.is_default', '=', true);
+        })
+        ->join('meal_types', 'plan_schedules.meal_type_id', '=', 'meal_types.id')
+        ->join('weekdays', 'plan_schedules.weekday_id', '=', 'weekdays.id')
+        ->where('meal_types.name', ucfirst($type))
+        ->where('weekdays.name', ucfirst($day))
+        ->select('plan_schedules.meal_name')
+        ->first();
     }
 
     public static function mealForToday()

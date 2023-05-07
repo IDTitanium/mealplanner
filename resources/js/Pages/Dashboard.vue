@@ -111,7 +111,7 @@ import axios from 'axios';
                             </div>
                             </div>
 
-                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <!-- <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
 
                                 <caption class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
                                     Meals for the week
@@ -150,7 +150,59 @@ import axios from 'axios';
                                         </td>
                                     </tr>
                                 </tbody>
+                            </table> -->
+
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 mt-10">
+                                <caption class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+                                    Meals for the week
+                                    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
+                                    Browse your list of meals for the week, this is based on the meal plan you have selected as the default.
+                                    </p>
+                                </caption>
+
+                                <thead class="text-xs font-semibold text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                    <th scope="col" class="py-3 px-6"></th>
+                                    <th scope="col" class="py-3 px-6">Monday</th>
+                                    <th scope="col" class="py-3 px-6">Tuesday</th>
+                                    <th scope="col" class="py-3 px-6">Wednesday</th>
+                                    <th scope="col" class="py-3 px-6">Thursday</th>
+                                    <th scope="col" class="py-3 px-6">Friday</th>
+                                    <th scope="col" class="py-3 px-6">Saturday</th>
+                                    <th scope="col" class="py-3 px-6">Sunday</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr v-for="meal_type in meal_types" :key="meal_type" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <th scope="row" class="py-4 px-6 font-bold font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ meal_type }}
+                                    </th>
+                                    <td class="py-4 px-6">
+                                        {{ getMealByTypeAndDay(meal_type, 'Monday') }}
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        {{ getMealByTypeAndDay(meal_type, 'Tuesday') }}
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        {{ getMealByTypeAndDay(meal_type, 'Wednesday') }}
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        {{ getMealByTypeAndDay(meal_type, 'Thursday') }}
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        {{ getMealByTypeAndDay(meal_type, 'Friday') }}
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        {{ getMealByTypeAndDay(meal_type, 'Saturday') }}
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        {{ getMealByTypeAndDay(meal_type, 'Sunday') }}
+                                    </td>
+                                    </tr>
+                                </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div>
@@ -168,7 +220,14 @@ import axios from 'axios';
                 plans: [],
                 plansToday: {},
                 plansTomorrow: {},
-                activePlan: {}
+                activePlan: {},
+                mealTypesAndMeal: {
+                    'Breakfast': {
+                    },
+                    'Lunch': {},
+                    'Dinner': {}
+                },
+                meal_types: ['Breakfast', 'Lunch', 'Dinner']
             }
         },
         created() {
@@ -176,6 +235,9 @@ import axios from 'axios';
             this.fetchTodayPlans()
             this.fetchTomorrowPlans()
             this.getActivePlan()
+        },
+        mounted() {
+            this.getAllMeals()
         },
         methods: {
             fetchMealSchedules() {
@@ -197,6 +259,29 @@ import axios from 'axios';
                 axios.get(route('api.plans.active')).then(data => {
                     this.activePlan = data.data.data
                 })
+            },
+            async getMealForDay(type, day) {
+                let url = `/plans/get-meal?meal_type=${type}&day=${day}`
+                const data= await axios.get(url);
+
+                return data.data.data.meal_name
+            },
+            getAllMeals() {
+                const mealTypeArr = ['Breakfast', 'Lunch', 'Dinner']
+
+                mealTypeArr.forEach((type) => {
+                    ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].forEach(async (day) => {
+                        let meal = await this.getMealForDay(type, day)
+
+                        this.mealTypesAndMeal[type][day] = meal
+                    })
+                })
+                console.log(this.mealTypesAndMeal)
+            },
+            getMealByTypeAndDay(type, day) {
+                day = day.toLowerCase()
+                if (Object.values(this.mealTypesAndMeal).length < 1) return null
+                return this.mealTypesAndMeal[type][day]
             }
         }
     }
